@@ -11,7 +11,11 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['@radix-ui/react-dialog', '@radix-ui/react-slot', '@radix-ui/react-toast'],
+          'vendor-utils': ['clsx', 'tailwind-merge', 'class-variance-authority'],
+          'vendor-supabase': ['@supabase/supabase-js'],
+          'vendor-ai': ['openai'],
         },
         assetFileNames: 'assets/[name]-[hash][extname]',
       },
@@ -21,6 +25,9 @@ export default defineConfig({
     },
     cssCodeSplit: true,
     sourcemap: true,
+    chunkSizeWarningLimit: 800,
+    minify: 'esbuild',
+    target: 'esnext',
   },
   server: {
     headers: {
