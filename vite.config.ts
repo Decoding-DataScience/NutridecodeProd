@@ -7,9 +7,22 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+        },
+      },
+    },
+    modulePreload: {
+      polyfill: true,
+    },
+  },
   server: {
     headers: {
       'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/javascript',
     },
     proxy: {
       '/api': {
