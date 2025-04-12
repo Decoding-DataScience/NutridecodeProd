@@ -13,11 +13,14 @@ export default defineConfig({
         manualChunks: {
           vendor: ['react', 'react-dom'],
         },
+        assetFileNames: 'assets/[name]-[hash][extname]',
       },
     },
     modulePreload: {
       polyfill: true,
     },
+    cssCodeSplit: true,
+    sourcemap: true,
   },
   server: {
     headers: {
