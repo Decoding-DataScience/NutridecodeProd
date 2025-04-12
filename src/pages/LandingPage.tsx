@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
 import {
   Smartphone,
   Scan,
@@ -46,23 +45,10 @@ export const LandingPage: React.FC = (): JSX.Element => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
 
-  useEffect(() => {
-    // Only redirect if we're not in a loading state and user exists
-    if (!loading && user) {
-      navigate('/dashboard');
-    }
-  }, [user, loading, navigate]);
-
-  // If we're loading auth state, show loading indicator
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+  const handleGetStarted = () => {
+    navigate('/auth');
+  };
 
   const sliderImages = [
     {
@@ -154,10 +140,6 @@ export const LandingPage: React.FC = (): JSX.Element => {
 
     return () => clearInterval(interval);
   }, [sliderImages.length]);
-
-  const handleGetStarted = () => {
-    navigate('/waitlist');
-  };
 
   const toggleFaq = (index: number) => {
     setOpenFaqs(prev => 
