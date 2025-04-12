@@ -5,12 +5,27 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --primary-color: #2ECC71;
+    --secondary-color: #27AE60;
+    --text-color: #333333;
+    --background-color: #FFFFFF;
+  }
+
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background-color);
+    color: var(--text-color);
   }
 
   .font-roboto {
@@ -413,4 +428,11 @@
 
 .text-shadow {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* App container */
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

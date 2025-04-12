@@ -2,7 +2,6 @@ import { createContext, useContext } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import Routes from './Routes';
-import './App.css';
 
 export const AuthContext = createContext<ReturnType<typeof useAuth> | null>(null);
 
