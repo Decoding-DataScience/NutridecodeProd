@@ -30,7 +30,7 @@ const handleResponse = async (response: Response) => {
   return response;
 };
 
-export async function textToSpeech(text: string): Promise<ArrayBuffer> {
+export async function textToSpeech(text: string, retryCount = 0): Promise<ArrayBuffer> {
   try {
     const response = await fetch(`${ELEVENLABS_API_ENDPOINT}/text-to-speech/eleven_multilingual_v2`, {
       method: 'POST',
@@ -54,9 +54,6 @@ export async function textToSpeech(text: string): Promise<ArrayBuffer> {
 
     return await response.arrayBuffer();
   } catch (error) {
-    console.error('Error in text-to-speech conversion:', error);
-    throw new Error('Failed to convert text to speech. Please try again later.');
-  }
     console.error('Text-to-speech error:', error);
     
     // Implement retry logic for specific errors
@@ -77,7 +74,7 @@ export async function textToSpeech(text: string): Promise<ArrayBuffer> {
         : 'Failed to convert text to speech'
     );
   }
-};
+}
 
 export const playAudio = async (audioBuffer: ArrayBuffer): Promise<HTMLAudioElement> => {
   try {
