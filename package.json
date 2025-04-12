@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "predev": "node scripts/check-env.js",
+    "predev": "node scripts/check-env.mjs",
     "dev": "vite",
-    "prebuild": "node scripts/check-env.js",
+    "prebuild": "node scripts/check-env.mjs",
     "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
