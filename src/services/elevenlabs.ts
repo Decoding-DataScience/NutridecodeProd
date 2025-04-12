@@ -1,5 +1,6 @@
-const ELEVENLABS_API_KEY = import.meta.env.VITE_ELEVENLABS_API_KEY;
-const ELEVENLABS_API_URL = 'https://api.elevenlabs.io/v1';
+import { getEnvVar } from '../utils/env';
+
+const ELEVENLABS_API_ENDPOINT = 'https://api.elevenlabs.io/v1';
 const VOICE_ID = '21m00Tcm4TlvDq8ikWAM'; // Default multilingual v2 voice
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
@@ -7,12 +8,8 @@ const RETRY_DELAY = 1000; // 1 second
 // Keep track of current audio instance
 let currentAudio: HTMLAudioElement | null = null;
 
-// Validate API key
-const validateApiKey = () => {
-  if (!ELEVENLABS_API_KEY) {
-    throw new Error('ElevenLabs API key is not configured. Please check your environment variables.');
-  }
-};
+// Get API key using our secure environment variable handler
+const getApiKey = () => getEnvVar('VITE_ELEVENLABS_API_KEY');
 
 // Helper function to delay execution
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -33,16 +30,13 @@ const handleResponse = async (response: Response) => {
   return response;
 };
 
-export const textToSpeech = async (text: string, retryCount = 0): Promise<ArrayBuffer> => {
+export async function textToSpeech(text: string): Promise<ArrayBuffer> {
   try {
-    validateApiKey();
-
-    const response = await fetch(`${ELEVENLABS_API_URL}/text-to-speech/${VOICE_ID}`, {
+    const response = await fetch(`${ELEVENLABS_API_ENDPOINT}/text-to-speech/eleven_multilingual_v2`, {
       method: 'POST',
       headers: {
-        'Accept': 'audio/mpeg',
         'Content-Type': 'application/json',
-        'xi-api-key': ELEVENLABS_API_KEY,
+        'xi-api-key': getApiKey(),
       },
       body: JSON.stringify({
         text,
@@ -50,15 +44,19 @@ export const textToSpeech = async (text: string, retryCount = 0): Promise<ArrayB
         voice_settings: {
           stability: 0.5,
           similarity_boost: 0.75,
-          style: 0.0,
-          use_speaker_boost: true
-        }
+        },
       }),
     });
 
-    await handleResponse(response);
+    if (!response.ok) {
+      throw new Error(`ElevenLabs API error: ${response.statusText}`);
+    }
+
     return await response.arrayBuffer();
   } catch (error) {
+    console.error('Error in text-to-speech conversion:', error);
+    throw new Error('Failed to convert text to speech. Please try again later.');
+  }
     console.error('Text-to-speech error:', error);
     
     // Implement retry logic for specific errors

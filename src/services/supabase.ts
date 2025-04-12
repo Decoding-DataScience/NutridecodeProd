@@ -1,14 +1,13 @@
 import { createClient } from '@supabase/supabase-js';
 import type { AnalysisResult } from './openai';
+import type { UserPreferences } from './preferences';
+import { getEnvVar } from '../utils/env';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Supabase credentials are missing. Please check your .env file.');
-}
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Initialize Supabase client with secure environment variables
+export const supabase = createClient(
+  getEnvVar('VITE_SUPABASE_URL'),
+  getEnvVar('VITE_SUPABASE_ANON_KEY')
+);
 
 interface WaitlistEntry {
   full_name: string;
@@ -89,6 +88,7 @@ export async function initializeDatabase() {
         .insert({
           id: '00000000-0000-0000-0000-000000000000',
           user_id: '00000000-0000-0000-0000-000000000000',
+          preferred_language: 'en',
           dietary_restrictions: [],
           preferred_diets: [],
           allergen_alerts: [],
@@ -135,6 +135,7 @@ export async function initializeDatabase() {
             .insert({
               id: '00000000-0000-0000-0000-000000000000',
               user_id: '00000000-0000-0000-0000-000000000000',
+              preferred_language: 'en',
               dietary_restrictions: [],
               preferred_diets: [],
               allergen_alerts: [],
@@ -180,6 +181,13 @@ export async function initializeDatabase() {
       throw new Error('Failed to check preferences table: ' + testError.message);
     }
 
+    // Add preferred_language column if it doesn't exist
+    const { error: alterError } = await supabase.rpc('add_preferred_language_column');
+    if (alterError && !alterError.message.includes('already exists')) {
+      console.error('Error adding preferred_language column:', alterError);
+      throw new Error('Failed to add preferred_language column: ' + alterError.message);
+    }
+
     // Verify the table structure
     const { error: verifyError } = await supabase
       .from('user_preferences')
@@ -213,7 +221,7 @@ export async function saveAnalysis(analysis: AnalysisResult, imageUrl: string) {
     console.log('Starting analysis save process...');
     
     // Check if we have the required credentials
-    if (!supabaseUrl || !supabaseAnonKey) {
+    if (!getEnvVar('VITE_SUPABASE_URL') || !getEnvVar('VITE_SUPABASE_ANON_KEY')) {
       throw new Error('Supabase credentials are missing');
     }
 
@@ -620,3 +628,23 @@ export const getUserProfile = async (userId: string) => {
     return null;
   }
 };
+
+export async function getUserPreferences(): Promise<UserPreferences | null> {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return null;
+
+    const { data, error } = await supabase
+      .from('user_preferences')
+      .select('*')
+      .eq('user_id', user.id)
+      .single();
+
+    if (error) throw error;
+
+    return data as UserPreferences;
+  } catch (error) {
+    console.error('Error fetching user preferences:', error);
+    return null;
+  }
+}

@@ -29,6 +29,7 @@ import {
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ScrollProgress from '../components/ScrollProgress';
+import VoiceChatButton from '../components/VoiceChatButton';
 
 interface Testimonial {
   name: string;
@@ -381,183 +382,28 @@ export const LandingPage: React.FC = (): JSX.Element => {
       <Header onGetStarted={handleGetStarted} isLanding={true} />
       <main>
         {/* Hero Section */}
-        <section className="relative min-h-screen flex items-center geometric-pattern pt-[70px]">
-          <div className="absolute inset-0 bg-gradient-to-b from-white/50 to-transparent" />
-          <div className="container mx-auto px-4 flex flex-col md:flex-row items-center relative">
-            {/* Left Content */}
-            <div className="md:w-1/2 space-y-6 animate-slide-up">
-              <h1 className="text-4xl md:text-6xl font-bold leading-tight text-[#1B2559]">
-                Decode Your Food with AI + Voice Commands
+        <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-white pt-16 md:pt-20 lg:pt-24">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
+                <span className="block">Make Informed Food Choices</span>
+                <span className="block text-primary">With AI-Powered Insights</span>
               </h1>
-              <p className="text-xl text-[#636B83]">
-                Make informed decisions about your food with advanced image analysis, nutritional insights, and voice-activated commands.
+              <p className="mx-auto mt-3 max-w-md text-base text-gray-500 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl">
+                Scan food labels instantly, detect allergens, and get personalized nutrition insights powered by advanced AI technology.
               </p>
-              <div className="flex items-center space-x-3">
-                <button 
-                  onClick={handleGetStarted} 
-                  className="px-6 py-3 bg-[#00A651] text-white font-semibold rounded-lg hover:bg-[#008C44] transition-colors duration-300 flex items-center space-x-2"
-                >
-                  Join the Waitlist →
-                </button>
-              </div>
-              <div className="flex items-center space-x-2 text-[#636B83]">
-                <span className="w-5 h-5">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 15.5C11.0572 15.5 10.1544 15.1544 9.46447 14.5355C8.77455 13.9166 8.42893 13.0138 8.42893 12.071C8.42893 11.1282 8.77455 10.2254 9.46447 9.53553C10.1544 8.84561 11.0572 8.5 12 8.5C12.9428 8.5 13.8456 8.84561 14.5355 9.53553C15.2254 10.2254 15.571 11.1282 15.571 12.071C15.571 13.0138 15.2254 13.9166 14.5355 14.5355C13.8456 15.1544 12.9428 15.5 12 15.5Z" stroke="#636B83" strokeWidth="1.5"/>
-                  </svg>
-                </span>
-                <span className="text-sm">Just ask: "Is this food halal?"</span>
-              </div>
-            </div>
-
-            {/* Right Phone Slider */}
-            <div className="md:w-1/2 mt-12 md:mt-0">
-              <div className="relative w-full max-w-[375px] mx-auto">
-                {/* Phone Frame */}
-                <div className="relative aspect-[19.5/42] rounded-[3rem] overflow-hidden shadow-2xl bg-black p-1">
-                  {/* Status Bar */}
-                  <div className="absolute top-0 left-0 right-0 h-6 bg-black z-20 flex items-center justify-between px-6">
-                    <span className="text-white text-xs">9:53</span>
-                    <div className="flex items-center space-x-1">
-                      <div className="w-4 h-4 flex items-center">
-                        <div className="h-2 w-2 bg-white rounded-full"></div>
-                      </div>
-                      <div className="text-white text-xs">77%</div>
-                    </div>
-                  </div>
-
-                  {/* Dynamic Content */}
-                  <div className="relative w-full h-full rounded-[2.75rem] overflow-hidden bg-white">
-                    {/* Back Button and Share */}
-                    <div className="absolute top-6 left-0 right-0 flex justify-between items-center px-4 z-20">
-                      <button className="text-blue-500 flex items-center space-x-1">
-                        <ChevronLeft className="w-5 h-5" />
-                        <span>History</span>
-                      </button>
-                      <button className="text-blue-500">
-                        <ArrowRight className="w-5 h-5 rotate-45" />
-                      </button>
-                    </div>
-
-                    {/* Slides */}
-                    <div className="relative h-full">
-                      {sliderImages.map((slide, index) => (
-                        <div
-                          key={index}
-                          className={`absolute inset-0 transition-opacity duration-500 ${
-                            index === activeSlide ? 'opacity-100' : 'opacity-0'
-                          }`}
-                        >
-                          <div className="h-full overflow-y-auto pt-16 pb-4">
-                            {/* Product Header */}
-                            <div className="px-4 mb-6">
-                              <div className="flex items-start space-x-4">
-                                <img
-                                  src={slide.image}
-                                  alt={slide.productName}
-                                  className="w-24 h-24 object-cover rounded-lg"
-                                />
-                                <div className="flex-1">
-                                  <h2 className="text-xl font-semibold">{slide.productName}</h2>
-                                  <p className="text-gray-500">{slide.brand}</p>
-                                  <div className="mt-2 flex items-center space-x-2">
-                                    <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                                      <div className="w-2 h-2 bg-white rounded-full"></div>
-                                    </div>
-                                    <span className="font-semibold">{slide.score}</span>
-                                    <span className="text-gray-500">{slide.scoreLabel}</span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
-                            {/* Positives Section */}
-                            <div className="px-4">
-                              <h3 className="text-lg font-semibold mb-2">Positives</h3>
-                              <div className="space-y-4">
-                                {slide.positives.map((item, i) => (
-                                  <div key={i} className="flex items-center justify-between">
-                                    <div className="flex items-center space-x-3">
-                                      <div className="w-6 h-6">
-                                        {/* Icon will be added based on type */}
-                                      </div>
-                                      <div>
-                                        <p className="font-medium">{item.label}</p>
-                                        <p className="text-sm text-gray-500">{item.desc}</p>
-                                      </div>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                      <span className="font-medium">{item.value}</span>
-                                      <ChevronDown className="w-4 h-4 text-gray-400" />
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            {/* Negatives Section */}
-                            {slide.negatives.length > 0 && (
-                              <div className="px-4 mt-6">
-                                <h3 className="text-lg font-semibold mb-2">Negatives</h3>
-                                <div className="space-y-4">
-                                  {slide.negatives.map((item, i) => (
-                                    <div key={i} className="flex items-center justify-between">
-                                      <div className="flex items-center space-x-3">
-                                        <div className="w-6 h-6">
-                                          {/* Icon will be added based on type */}
-                                        </div>
-                                        <div>
-                                          <p className="font-medium">{item.label}</p>
-                                          <p className="text-sm text-gray-500">{item.desc}</p>
-                                        </div>
-                                      </div>
-                                      <div className="flex items-center space-x-2">
-                                        <span className="font-medium">{item.value}</span>
-                                        <ChevronDown className="w-4 h-4 text-gray-400" />
-                                      </div>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {/* Options Section */}
-                            <div className="px-4 mt-6">
-                              <h3 className="text-lg font-semibold mb-2">Options</h3>
-                              <button className="w-full flex items-center justify-between py-3 border-t border-gray-200">
-                                <span>{index % 2 === 0 ? 'Add to favorites' : 'Remove from favorites'}</span>
-                                <Star className={`w-5 h-5 ${index % 2 === 0 ? 'text-gray-400' : 'text-black fill-current'}`} />
-                              </button>
-                              <button className="w-full flex items-center justify-between py-3 border-t border-gray-200">
-                                <span>Food preferences</span>
-                                <div className="w-5 h-5 flex flex-col justify-between">
-                                  <div className="h-[2px] w-full bg-gray-800"></div>
-                                  <div className="h-[2px] w-full bg-gray-800"></div>
-                                  <div className="h-[2px] w-full bg-gray-800"></div>
-                                </div>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              <div className="mx-auto mt-5 max-w-md sm:flex sm:justify-center md:mt-8">
+                <div className="rounded-md shadow">
+                  <button
+                    onClick={handleGetStarted}
+                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-primary px-8 py-3 text-base font-medium text-white hover:bg-primary-dark md:px-10 md:py-4 md:text-lg"
+                  >
+                    Get Started
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </button>
                 </div>
-
-                {/* Navigation Dots */}
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                  {sliderImages.map((_, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setActiveSlide(index)}
-                      className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                        index === activeSlide 
-                          ? 'w-6 bg-primary' 
-                          : 'bg-gray-300 hover:bg-gray-400'
-                      }`}
-                      aria-label={`Go to slide ${index + 1}`}
-                    />
-                  ))}
+                <div className="mt-3 sm:mt-0 sm:ml-3">
+                  <VoiceChatButton className="w-full" />
                 </div>
               </div>
             </div>

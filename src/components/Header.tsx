@@ -115,46 +115,38 @@ const Header = ({ onGetStarted, isLanding = false }: HeaderProps) => {
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+                  className={`flex items-center space-x-3 px-5 py-2.5 rounded-lg transition-all text-base ${
                     location.pathname === item.href
-                      ? 'bg-primary bg-opacity-10 text-primary-dark font-medium'
-                      : 'text-gray-600 hover:text-primary-dark hover:bg-primary-light hover:bg-opacity-5'
+                      ? 'bg-primary bg-opacity-10 text-primary-dark font-semibold'
+                      : 'text-gray-600 hover:text-primary-dark hover:bg-primary-light hover:bg-opacity-5 font-medium'
                   }`}
                 >
                   {item.icon}
-                  <span>{item.name}</span>
+                  <span className="text-base">{item.name}</span>
                 </Link>
               ))}
             </div>
 
-            {/* User Profile */}
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-primary to-secondary flex items-center justify-center text-white font-medium">
-                  {userProfile?.full_name?.[0] || user.email?.[0].toUpperCase()}
-                </div>
-                <span className="text-sm text-gray-700">
-                  {userProfile?.full_name || user.email?.split('@')[0]}
-                </span>
-                <button
-                  onClick={handleSignOut}
-                  className="ml-4 text-red-600 hover:text-red-700 text-sm font-medium"
-                >
-                  Sign Out
-                </button>
-              </div>
+            {/* User Menu */}
+            <div className="hidden md:flex items-center">
+              <button
+                onClick={handleSignOut}
+                className="px-6 py-2.5 text-base font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+              >
+                Sign Out
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
             <div className="md:hidden">
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg text-gray-600 hover:text-primary-dark hover:bg-primary-light hover:bg-opacity-10 transition-colors"
+                className="p-2.5 rounded-lg text-gray-600 hover:text-primary-dark hover:bg-primary-light hover:bg-opacity-10 transition-colors"
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-6 w-6" />
+                  <X className="h-7 w-7" />
                 ) : (
-                  <Menu className="h-6 w-6" />
+                  <Menu className="h-7 w-7" />
                 )}
               </button>
             </div>
@@ -162,20 +154,20 @@ const Header = ({ onGetStarted, isLanding = false }: HeaderProps) => {
 
           {/* Mobile Navigation */}
           {isMobileMenuOpen && (
-            <div className="md:hidden py-2 space-y-1">
+            <div className="md:hidden py-3 space-y-2">
               {appNavigationItems.map((item) => (
                 <Link
                   key={item.name}
                   to={item.href}
-                  className={`flex items-center space-x-2 px-4 py-2.5 rounded-lg transition-colors ${
+                  className={`flex items-center space-x-3 px-5 py-3 rounded-lg transition-all text-base ${
                     location.pathname === item.href
-                      ? 'bg-primary bg-opacity-10 text-primary-dark'
-                      : 'text-gray-600 hover:text-primary-dark hover:bg-primary-light hover:bg-opacity-5'
+                      ? 'bg-primary bg-opacity-10 text-primary-dark font-semibold'
+                      : 'text-gray-600 hover:text-primary-dark hover:bg-primary-light hover:bg-opacity-5 font-medium'
                   }`}
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item.icon}
-                  <span>{item.name}</span>
+                  <span className="text-base">{item.name}</span>
                 </Link>
               ))}
               <button
@@ -183,7 +175,7 @@ const Header = ({ onGetStarted, isLanding = false }: HeaderProps) => {
                   handleSignOut();
                   setIsMobileMenuOpen(false);
                 }}
-                className="w-full flex items-center px-4 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                className="w-full flex items-center px-5 py-3 text-base font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors"
               >
                 <span>Sign Out</span>
               </button>
@@ -222,7 +214,7 @@ const Header = ({ onGetStarted, isLanding = false }: HeaderProps) => {
               <button
                 key={item.name}
                 onClick={() => scrollToSection(item.href)}
-                className="text-sm font-medium text-gray-700 hover:text-primary-dark transition-colors"
+                className="text-base font-medium text-gray-700 hover:text-primary-dark transition-colors tracking-wide"
               >
                 {item.name}
               </button>
@@ -230,16 +222,16 @@ const Header = ({ onGetStarted, isLanding = false }: HeaderProps) => {
           </div>
 
           {/* Action Buttons */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-6">
             <button
               onClick={() => navigate('/auth')}
-              className="px-4 py-2 rounded-lg text-primary-dark hover:bg-primary-light hover:bg-opacity-10 transition-colors"
+              className="px-6 py-2.5 rounded-lg text-lg text-primary-dark hover:bg-primary-light hover:bg-opacity-10 transition-colors font-medium"
             >
               Sign In
             </button>
             <button
               onClick={onGetStarted}
-              className="px-6 py-2 rounded-full bg-gradient-to-r from-primary to-secondary text-white font-medium hover:shadow-lg transition-all transform hover:scale-105 hover:translate-y-[-2px]"
+              className="px-8 py-3 rounded-full bg-gradient-to-r from-primary to-secondary text-white text-lg font-semibold hover:shadow-lg transition-all transform hover:scale-105 hover:translate-y-[-2px]"
             >
               Get Started
             </button>

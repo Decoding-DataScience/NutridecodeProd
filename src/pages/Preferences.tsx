@@ -12,8 +12,34 @@ import {
   PACKAGING_PREFERENCES,
   defaultPreferences
 } from '../services/preferences';
-import { Check, X, Save, AlertTriangle, Loader2 } from 'lucide-react';
+import { Check, X, Save, AlertTriangle, Loader2, Globe } from 'lucide-react';
 import Header from '../components/Header';
+
+const SUPPORTED_LANGUAGES = [
+  { code: 'en', name: 'English' },
+  { code: 'ar', name: 'العربية' },
+  { code: 'ur', name: 'اردو' },
+  { code: 'hi', name: 'हिन्दी' },
+  { code: 'ta', name: 'தமிழ்' },
+  { code: 'kn', name: 'ಕನ್ನಡ' },
+  { code: 'te', name: 'తెలుగు' },
+  { code: 'ml', name: 'മലയാളം' },
+  { code: 'bn', name: 'বাংলা' },
+  { code: 'es', name: 'Español' },
+  { code: 'fr', name: 'Français' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'it', name: 'Italiano' },
+  { code: 'pt', name: 'Português' },
+  { code: 'nl', name: 'Nederlands' },
+  { code: 'pl', name: 'Polski' },
+  { code: 'ru', name: 'Русский' },
+  { code: 'ja', name: '日本語' },
+  { code: 'ko', name: '한국어' },
+  { code: 'zh', name: '中文' },
+  { code: 'tr', name: 'Türkçe' },
+  { code: 'vi', name: 'Tiếng Việt' },
+  { code: 'th', name: 'ไทย' }
+];
 
 const Preferences = () => {
   const navigate = useNavigate();
@@ -207,6 +233,31 @@ const Preferences = () => {
                     </>
                   )}
                 </button>
+              </div>
+            </div>
+
+            {/* Language Preferences */}
+            <div className="mb-8">
+              <div className="flex items-center mb-4">
+                <Globe className="w-5 h-5 text-primary mr-2" />
+                <h2 className="text-lg font-semibold text-gray-900">Language Preferences</h2>
+              </div>
+              <div className="flex items-center space-x-4">
+                <label htmlFor="language" className="text-sm font-medium text-gray-700">
+                  Preferred Language
+                </label>
+                <select
+                  id="language"
+                  value={preferences.preferred_language || 'en'}
+                  onChange={(e) => setPreferences({ ...preferences, preferred_language: e.target.value })}
+                  className="mt-1 block w-64 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-primary focus:border-primary rounded-md"
+                >
+                  {SUPPORTED_LANGUAGES.map((lang) => (
+                    <option key={lang.code} value={lang.code}>
+                      {lang.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 

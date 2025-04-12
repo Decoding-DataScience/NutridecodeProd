@@ -6,6 +6,7 @@ let initializationPromise: Promise<void> | null = null;
 export interface UserPreferences {
   id: string;
   user_id: string;
+  preferred_language: string;
   dietary_restrictions: string[];
   preferred_diets: string[];
   allergen_alerts: string[];
@@ -34,6 +35,7 @@ export interface UserPreferences {
 }
 
 export const defaultPreferences: Partial<UserPreferences> = {
+  preferred_language: 'en',
   dietary_restrictions: [],
   preferred_diets: [],
   allergen_alerts: [],

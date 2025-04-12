@@ -6,7 +6,19 @@ import type { AnalysisResult } from '../services/openai';
 import toast from 'react-hot-toast';
 
 interface AnalysisVoiceoverProps {
-  analysis: AnalysisResult;
+  analysis: AnalysisResult | {
+    type: 'ingredient';
+    name: string;
+    details: string;
+    productName: string;
+    ingredients: {
+      list: string[];
+      preservatives: string[];
+      additives: string[];
+      antioxidants: string[];
+      stabilizers: string[];
+    };
+  };
   className?: string;
 }
 
@@ -38,13 +50,19 @@ const AnalysisVoiceover: React.FC<AnalysisVoiceoverProps> = ({ analysis, classNa
       setIsLoading(true);
       setIsPlaying(true);
 
-      // Generate summary
+      // Generate summary based on analysis type
       toast.loading('Generating analysis summary...', {
         id: 'summary-loading',
         duration: 10000
       });
 
-      const summary = await generateAnalysisSummary(analysis);
+      let summary;
+      if ('type' in analysis && analysis.type === 'ingredient') {
+        summary = `Analysis for ${analysis.name}. ${analysis.details}`;
+      } else {
+        summary = await generateAnalysisSummary(analysis as AnalysisResult);
+      }
+      
       toast.dismiss('summary-loading');
 
       // Convert to speech
