@@ -1,5 +1,4 @@
 import { Routes as RouterRoutes, Route, Navigate } from 'react-router-dom';
-import { useEffect } from 'react';
 import ScrollProgress from './components/ScrollProgress';
 import { Layout } from './components/Layout';
 import { LandingPage } from './pages/LandingPage';
@@ -10,21 +9,8 @@ import Results from './pages/Results';
 import History from './pages/History';
 import Preferences from './pages/Preferences';
 import ProtectedRoute from './components/ProtectedRoute';
-import { initializeDatabase } from './services/supabase';
 
 const Routes = () => {
-  useEffect(() => {
-    // Initialize database when app starts
-    const init = async () => {
-      try {
-        await initializeDatabase();
-      } catch (error) {
-        console.error('Failed to initialize database:', error);
-      }
-    };
-    init();
-  }, []);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <ScrollProgress />
