@@ -1,46 +1,51 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-// List of required environment variables
-const REQUIRED_ENV_VARS = [
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const requiredEnvVars = [
   'VITE_OPENAI_API_KEY',
   'VITE_ELEVENLABS_API_KEY',
   'VITE_SUPABASE_URL',
   'VITE_SUPABASE_ANON_KEY'
 ];
 
+// Check if running in development mode
+const isDevelopment = process.env.NODE_ENV === 'development';
+
+// Function to check environment variables
 function checkEnvVars() {
-  console.log('Checking environment variables...');
-  
   const missingVars = [];
 
-  REQUIRED_ENV_VARS.forEach(varName => {
-    if (!process.env[varName]) {
-      missingVars.push(varName);
+  requiredEnvVars.forEach(envVar => {
+    if (!process.env[envVar]) {
+      missingVars.push(envVar);
     }
   });
 
   if (missingVars.length > 0) {
-    console.error('\n❌ Missing required environment variables:');
-    missingVars.forEach(varName => {
-      console.error(`   - ${varName}`);
+    console.error('\x1b[31m%s\x1b[0m', 'Error: Missing required environment variables:');
+    missingVars.forEach(variable => {
+      console.error(`  - ${variable}`);
     });
-    console.error('\nPlease set these variables in your environment or .env file');
     process.exit(1);
   }
 
-  console.log('✅ All required environment variables are set');
+  console.log('\x1b[32m%s\x1b[0m', '✓ All required environment variables are set');
 }
 
-// Check if .env file exists in development
-if (process.env.NODE_ENV !== 'production') {
+// Check for .env file in development
+if (isDevelopment) {
   const envPath = path.join(process.cwd(), '.env');
   if (!fs.existsSync(envPath)) {
-    console.warn('\n⚠️  No .env file found!');
-    console.log('Please copy .env.example to .env and fill in your values\n');
+    console.warn('\x1b[33m%s\x1b[0m', 'Warning: No .env file found.');
+    console.warn('Please copy .env.example to .env and fill in your environment variables.');
   }
 }
 
+// Run the check
 checkEnvVars(); 
