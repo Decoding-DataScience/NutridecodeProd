@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../services/supabase';
 import type { User } from '@supabase/supabase-js';
 
 interface AuthContextType {
   user: User | null;
+  loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
 }
@@ -14,7 +14,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     // Get initial session
@@ -29,16 +28,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     });
 
-    // Handle browser close event
-    const handleBeforeUnload = async () => {
-      await supabase.auth.signOut();
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
     return () => {
       subscription.unsubscribe();
-      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, []);
 
@@ -66,17 +57,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Clear user state
       setUser(null);
-      
-      // Navigate to home
-      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
       throw error;
     }
   };
 
+  const value = {
+    user,
+    loading,
+    signIn,
+    signOut
+  };
+
   return (
-    <AuthContext.Provider value={{ user, signIn, signOut }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
